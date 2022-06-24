@@ -375,6 +375,8 @@ func getUserName(gothUser *goth.User) string {
 		return strings.Split(gothUser.Email, "@")[0]
 	case setting.OAuth2UsernameNickname:
 		return gothUser.NickName
+	case setting.OAuth2UsernameFullEmail:
+		return gothUser.Email
 	default: // OAuth2UsernameUserid
 		return gothUser.UserID
 	}

@@ -20,11 +20,13 @@ const (
 	OAuth2UsernameNickname OAuth2UsernameType = "nickname"
 	// OAuth2UsernameEmail username of oauth2 email filed will be used as gitea name
 	OAuth2UsernameEmail OAuth2UsernameType = "email"
+	// OAuth2UsernameEmail fullemail of oauth2 email filed will be used as gitea name
+	OAuth2UsernameFullEmail OAuth2UsernameType = "fullemail"
 )
 
 func (username OAuth2UsernameType) isValid() bool {
 	switch username {
-	case OAuth2UsernameUserid, OAuth2UsernameNickname, OAuth2UsernameEmail:
+	case OAuth2UsernameUserid, OAuth2UsernameNickname, OAuth2UsernameEmail, OAuth2UsernameFullEmail:
 		return true
 	}
 	return false

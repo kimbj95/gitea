@@ -607,11 +607,19 @@ var (
 
 // IsUsableUsername returns an error when a username is reserved
 func IsUsableUsername(name string) error {
-	// Validate username make sure it satisfies requirement.
-	if db.AlphaDashDotPattern.MatchString(name) {
-		// Note: usually this error is normally caught up earlier in the UI
-		return db.ErrNameCharsNotAllowed{Name: name}
+	if setting.OAuth2Client.Username == "fullemail" {
+		if db.AlphaDashDotAtPattern.MatchString(name) {
+			// Note: usually this error is normally caught up earlier in the UI
+			return db.ErrNameCharsNotAllowed{Name: name}
+		}
+	} else {
+		// Validate username make sure it satisfies requirement.
+		if db.AlphaDashDotPattern.MatchString(name) {
+			// Note: usually this error is normally caught up earlier in the UI
+			return db.ErrNameCharsNotAllowed{Name: name}
+		}
 	}
+
 	return db.IsUsableName(reservedUsernames, reservedUserPatterns, name)
 }
 
@@ -638,7 +646,7 @@ func CreateUser(u *User, overwriteDefault ...*CreateUserOverwriteOptions) (err e
 	u.Visibility = setting.Service.DefaultUserVisibilityMode
 	u.AllowCreateOrganization = setting.Service.DefaultAllowCreateOrganization && !setting.Admin.DisableRegularOrgCreation
 	u.EmailNotificationsPreference = setting.Admin.DefaultEmailNotification
-	u.MaxRepoCreation = -1
+	u.MaxRepoCreation = -1 // TODO
 	u.Theme = setting.UI.DefaultTheme
 	u.IsRestricted = setting.Service.DefaultUserIsRestricted
 	u.IsActive = !(setting.Service.RegisterEmailConfirm || setting.Service.RegisterManualConfirm)
