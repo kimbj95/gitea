@@ -53,6 +53,10 @@ func parseAuthSource(ctx *context.APIContext, u *user_model.User, sourceID int64
 
 // CreateUser create a user
 func CreateUser(ctx *context.APIContext) {
+
+	fmt.Print("\n")
+	fmt.Print("===== CreateUser ======")
+
 	// swagger:operation POST /admin/users admin adminCreateUser
 	// ---
 	// summary: Create a user
@@ -141,6 +145,10 @@ func CreateUser(ctx *context.APIContext) {
 	if form.SendNotify {
 		mailer.SendRegisterNotifyMail(u)
 	}
+
+	fmt.Print("\n=== u ===")
+	fmt.Printf("%+v\n", u)
+
 	ctx.JSON(http.StatusCreated, convert.ToUser(u, ctx.Doer))
 }
 

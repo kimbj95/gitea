@@ -283,6 +283,10 @@ func ConnectOpenID(ctx *context.Context) {
 
 // ConnectOpenIDPost handles submission of a form to connect an OpenID URI to an existing account
 func ConnectOpenIDPost(ctx *context.Context) {
+
+	fmt.Print("\n")
+	fmt.Print("===== ConnectOpenIDPost =====")
+
 	form := web.GetForm(ctx).(*forms.ConnectOpenIDForm)
 	oid, _ := ctx.Session.Get("openid_verified_uri").(string)
 	if oid == "" {

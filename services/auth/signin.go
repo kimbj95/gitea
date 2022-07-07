@@ -5,6 +5,7 @@
 package auth
 
 import (
+	"fmt"
 	"strings"
 
 	"code.gitea.io/gitea/models/auth"
@@ -22,6 +23,10 @@ import (
 
 // UserSignIn validates user name and password.
 func UserSignIn(username, password string) (*user_model.User, *auth.Source, error) {
+
+	fmt.Print("\n")
+	fmt.Print("===== UserSignIn =====")
+
 	var user *user_model.User
 	isEmail := false
 	if strings.Contains(username, "@") {
@@ -50,12 +55,20 @@ func UserSignIn(username, password string) (*user_model.User, *auth.Source, erro
 	}
 
 	if user != nil {
+
+		fmt.Print("\n")
+		fmt.Print("===== if 1 =====")
+
 		hasUser, err := user_model.GetUser(user)
 		if err != nil {
 			return nil, nil, err
 		}
 
 		if hasUser {
+
+			fmt.Print("\n")
+			fmt.Print("===== if 12 =====")
+
 			source, err := auth.GetSourceByID(user.LoginSource)
 			if err != nil {
 				return nil, nil, err
@@ -81,12 +94,19 @@ func UserSignIn(username, password string) (*user_model.User, *auth.Source, erro
 				return nil, nil, user_model.ErrUserProhibitLogin{UID: user.ID, Name: user.Name}
 			}
 
+			fmt.Print("\n")
+			fmt.Print("===== if 12 pass =====")
+
 			return user, source, nil
 		}
 	}
 
 	sources, err := auth.AllActiveSources()
 	if err != nil {
+
+		fmt.Print("\n")
+		fmt.Print("===== if 2 =====")
+
 		return nil, nil, err
 	}
 

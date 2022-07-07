@@ -147,6 +147,10 @@ func checkAutoLogin(ctx *context.Context) bool {
 
 // SignIn render sign in page
 func SignIn(ctx *context.Context) {
+
+	fmt.Print("\n")
+	fmt.Print("===== SignIn =====")
+
 	ctx.Data["Title"] = ctx.Tr("sign_in")
 
 	// Check auto-login
@@ -172,6 +176,10 @@ func SignIn(ctx *context.Context) {
 
 // SignInPost response for sign in request
 func SignInPost(ctx *context.Context) {
+
+	fmt.Print("\n")
+	fmt.Print("===== SignInPost =====")
+
 	ctx.Data["Title"] = ctx.Tr("sign_in")
 
 	orderedOAuth2Names, oauth2Providers, err := oauth2.GetActiveOAuth2Providers()

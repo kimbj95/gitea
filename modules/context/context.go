@@ -425,6 +425,12 @@ func (ctx *Context) Error(status int, contents ...string) {
 func (ctx *Context) JSON(status int, content interface{}) {
 	ctx.Resp.Header().Set("Content-Type", "application/json;charset=utf-8")
 	ctx.Resp.WriteHeader(status)
+
+	fmt.Print("\n=== resp ===")
+	fmt.Printf("%+v\n", ctx.Resp)
+	fmt.Print("\n=== content ===")
+	fmt.Printf("%+v\n", content)
+
 	if err := json.NewEncoder(ctx.Resp).Encode(content); err != nil {
 		ctx.ServerError("Render JSON failed", err)
 	}

@@ -773,6 +773,10 @@ func handleAuthorizeError(ctx *context.Context, authErr AuthorizeError, redirect
 
 // SignInOAuth handles the OAuth2 login buttons
 func SignInOAuth(ctx *context.Context) {
+
+	fmt.Print("\n")
+	fmt.Print("===== SignInOAuth =====")
+
 	provider := ctx.Params(":provider")
 
 	authSource, err := auth.GetActiveOAuth2SourceByName(provider)
@@ -780,6 +784,13 @@ func SignInOAuth(ctx *context.Context) {
 		ctx.ServerError("SignIn", err)
 		return
 	}
+
+	fmt.Print("\n")
+	fmt.Print(authSource)
+	fmt.Print("\n")
+	fmt.Printf("%+v\n", ctx.Req)
+	fmt.Print("\n")
+	fmt.Printf("%+v\n", ctx.Resp)
 
 	// try to do a direct callback flow, so we don't authenticate the user again but use the valid accesstoken to get the user
 	user, gothUser, err := oAuth2UserLoginCallback(authSource, ctx.Req, ctx.Resp)
@@ -807,6 +818,10 @@ func SignInOAuth(ctx *context.Context) {
 
 // SignInOAuthCallback handles the callback from the given provider
 func SignInOAuthCallback(ctx *context.Context) {
+
+	fmt.Print("\n")
+	fmt.Print("===== SignInOAuthCallback =====")
+
 	provider := ctx.Params(":provider")
 
 	// first look if the provider is still active
@@ -821,7 +836,18 @@ func SignInOAuthCallback(ctx *context.Context) {
 		return
 	}
 
+	fmt.Print("\n")
+	fmt.Print(authSource)
+	fmt.Print("\n")
+	fmt.Printf("%+v\n", ctx.Req)
+	fmt.Print("\n")
+	fmt.Printf("%+v\n", ctx.Resp)
+
 	u, gothUser, err := oAuth2UserLoginCallback(authSource, ctx.Req, ctx.Resp)
+
+	fmt.Print("\n")
+	fmt.Printf("%+v\n", u)
+
 	if err != nil {
 		if user_model.IsErrUserProhibitLogin(err) {
 			uplerr := err.(user_model.ErrUserProhibitLogin)
@@ -992,6 +1018,10 @@ func updateAvatarIfNeed(url string, u *user_model.User) {
 }
 
 func handleOAuth2SignIn(ctx *context.Context, source *auth.Source, u *user_model.User, gothUser goth.User) {
+
+	fmt.Print("\n")
+	fmt.Print("===== handleOAuth2SignIn =====")
+
 	updateAvatarIfNeed(gothUser.AvatarURL, u)
 
 	needs2FA := false
@@ -1097,6 +1127,10 @@ func handleOAuth2SignIn(ctx *context.Context, source *auth.Source, u *user_model
 // OAuth2UserLoginCallback attempts to handle the callback from the OAuth2 provider and if successful
 // login the user
 func oAuth2UserLoginCallback(authSource *auth.Source, request *http.Request, response http.ResponseWriter) (*user_model.User, goth.User, error) {
+
+	fmt.Print("\n")
+	fmt.Print("===== oAuth2UserLoginCallback =====")
+
 	oauth2Source := authSource.Cfg.(*oauth2.Source)
 
 	// Make sure that the response is not an error response.
@@ -1119,6 +1153,10 @@ func oAuth2UserLoginCallback(authSource *auth.Source, request *http.Request, res
 
 	// Proceed to authenticate through goth.
 	gothUser, err := oauth2Source.Callback(request, response)
+
+	fmt.Print("\n")
+	fmt.Printf("%+v\n", gothUser)
+
 	if err != nil {
 		if err.Error() == "securecookie: the value is too long" || strings.Contains(err.Error(), "Data too long") {
 			log.Error("OAuth2 Provider %s returned too long a token. Current max: %d. Either increase the [OAuth2] MAX_TOKEN_LENGTH or reduce the information returned from the OAuth2 provider", authSource.Name, setting.OAuth2.MaxTokenLength)

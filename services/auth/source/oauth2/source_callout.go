@@ -5,6 +5,7 @@
 package oauth2
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/markbates/goth"
@@ -33,6 +34,10 @@ func (source *Source) Callout(request *http.Request, response http.ResponseWrite
 // Callback handles OAuth callback, resolve to a goth user and send back to original url
 // this will trigger a new authentication request, but because we save it in the session we can use that
 func (source *Source) Callback(request *http.Request, response http.ResponseWriter) (goth.User, error) {
+
+	fmt.Print("\n")
+	fmt.Print("===== Callback =====")
+
 	// not sure if goth is thread safe (?) when using multiple providers
 	request.Header.Set(ProviderHeaderKey, source.authSource.Name)
 

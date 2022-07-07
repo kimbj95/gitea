@@ -5,6 +5,8 @@
 package convert
 
 import (
+	"fmt"
+
 	"code.gitea.io/gitea/models/perm"
 	user_model "code.gitea.io/gitea/models/user"
 	api "code.gitea.io/gitea/modules/structs"
@@ -22,6 +24,10 @@ func ToUser(user, doer *user_model.User) *api.User {
 		signed = true
 		authed = doer.ID == user.ID || doer.IsAdmin
 	}
+
+	fmt.Print("\n=== doer ===")
+	fmt.Printf("%+v\n", doer)
+
 	return toUser(user, signed, authed)
 }
 
@@ -46,9 +52,14 @@ func ToUserWithAccessMode(user *user_model.User, accessMode perm.AccessMode) *ap
 // toUser convert user_model.User to api.User
 // signed shall only be set if requester is logged in. authed shall only be set if user is site admin or user himself
 func toUser(user *user_model.User, signed, authed bool) *api.User {
+
+	fmt.Print("\n")
+	fmt.Print("===== toUser ======")
+
 	result := &api.User{
 		ID:          user.ID,
 		UserName:    user.Name,
+		LoginName:   user.LoginName,
 		FullName:    user.FullName,
 		Email:       user.GetEmail(),
 		AvatarURL:   user.AvatarLink(),
@@ -78,6 +89,10 @@ func toUser(user *user_model.User, signed, authed bool) *api.User {
 		result.IsActive = user.IsActive
 		result.ProhibitLogin = user.ProhibitLogin
 	}
+
+	fmt.Print("\n=== result ===")
+	fmt.Printf("%+v\n", result)
+
 	return result
 }
 
